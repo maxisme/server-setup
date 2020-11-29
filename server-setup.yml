@@ -50,7 +50,7 @@
   roles:
     - maxisme.wireguard_private_networking
   vars:
-    wireguard_network_name: "private"
+    wireguard_network_name: "maxnet"
 
 - name: Setup telegraf
   hosts: telegraf

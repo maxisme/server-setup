@@ -2,7 +2,7 @@
 ```shell script
 $ cd ansible
 $ ansible-galaxy collection install community.crypto
-$ ansible-galaxy install maxisme.wireguard_private_networking rossmcdonald.telegraf
+$ ansible-galaxy install maxisme.wireguard_private_networking rossmcdonald.telegraf --force
 $ ansible-playbook -i hosts server-setup.yml
 ```
 add hosts to `/etc/ansible/hosts` - e.g:
@@ -19,6 +19,7 @@ apt-key adv --keyserver   keyserver.ubuntu.com --recv-keys 648ACFD622F3D138
 sh -c 'printf "Package: *\nPin: release a=unstable\nPin-Priority: 90\n" > /etc/apt/preferences.d/limit-unstable'
 apt-get update
 apt install wireguard
+apt install raspberrypi-kernel-headers
 ```
 # telegraf
 add your variables to the `vars/main.yml` :
