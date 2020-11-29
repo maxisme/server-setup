@@ -1,4 +1,6 @@
-- hosts: all
+- name: Setup SSH
+  hosts: ssh
+  remote_user: root
   become: yes
   tasks:
     - name: Generate an OpenSSH keypair
@@ -26,6 +28,11 @@
     - name: Restart sshd
       service: name=sshd state=restarted
 
+- name: Setup hostname
+  hosts: hostname
+  remote_user: root
+  become: yes
+  tasks:
     - name: Change hostname to the inventory_hostname
       hostname:
         name: "{{ inventory_hostname }}"
@@ -38,9 +45,56 @@
         regexp="^{{ ansible_default_ipv4.address }}"
 
 - name: Setup wireguard mesh
-  hosts: all
+  hosts: wg
   remote_user: root
   roles:
     - maxisme.wireguard_private_networking
   vars:
     wireguard_network_name: "private"
+
+- name: Setup telegraf
+  hosts: telegraf
+  remote_user: root
+  roles:
+    - rossmcdonald.telegraf
+  vars:
+    telegraf_agent_interval: 10s
+    telegraf_influxdb_urls:
+      - "{{ influxdburl }}"
+    telegraf_influxdb_timeout: 5s
+    telegraf_influxdb_username: "{{ influxdbuser }}"
+    telegraf_influxdb_password: "{{ influxdbpass }}"
+    telegraf_plugins_base:
+      - name: mem
+      - name: system
+      - name: cpu
+        options:
+          percpu: "true"
+          totalcpu: "true"
+          fielddrop:
+            - "time_*"
+      - name: disk
+        options:
+          mountpoints:
+            - "/"
+      - name: diskio
+        options:
+          skip_serial_number: "true"
+      - name: procstat
+        options:
+          exe: "influxd"
+          prefix: "influxdb"
+      - name: net
+      - name: nvidia_smi
+      - name: docker
+      - name: kernel
+      - name: processes
+      - name: swap
+      - name: tcp_listener
+      - name: udp_listener
+      - name: temp
+      - name: sensors
+      - name: netstat
+      - name: net_response
+  vars_files:
+    - vars/main.yml
