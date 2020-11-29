@@ -8,6 +8,17 @@ $ ansible-playbook -i hosts server-setup.yml
 add hosts to `/etc/ansible/hosts` - e.g:
 ```
 node1 ansible_host=172.104.205.199 vpn_ip=10.1.0.3
+[ssh]
+node1
+
+[hostname]
+node1
+
+[wg]
+node1
+
+[telegraf]
+node1
 ```
 `ansible all -m ping`
 
