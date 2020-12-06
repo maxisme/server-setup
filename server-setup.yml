@@ -1,5 +1,5 @@
 - name: Setup SSH
-  hosts: ssh
+  hosts: all
   remote_user: root
   become: yes
   tasks:
@@ -28,37 +28,13 @@
     - name: Restart sshd
       service: name=sshd state=restarted
 
-- name: Setup hostname
-  hosts: hostname
-  remote_user: root
-  become: yes
-  tasks:
-    - name: Change hostname to the inventory_hostname
-      hostname:
-        name: "{{ inventory_hostname }}"
-
-    - name: Store new hostname in /etc/hosts
-      lineinfile:
-        state=present
-        dest=/etc/hosts
-        line="{{ ansible_default_ipv4.address }} {{ inventory_hostname }} {{ ansible_hostname }}"
-        regexp="^{{ ansible_default_ipv4.address }}"
-
 - name: Setup docker
-  hosts: docker
+  hosts: all
   roles:
     - geerlingguy.docker
 
-- name: Setup wireguard mesh
-  hosts: wg
-  remote_user: root
-  roles:
-    - maxisme.wireguard_private_networking
-  vars:
-    wireguard_network_name: "maxnet"
-
 - name: Setup telegraf
-  hosts: telegraf
+  hosts: all
   remote_user: root
   roles:
     - rossmcdonald.telegraf
@@ -103,3 +79,27 @@
       - name: net_response
   vars_files:
     - vars/main.yml
+
+- name: Setup hostname
+  hosts: hostname
+  remote_user: root
+  become: yes
+  tasks:
+    - name: Change hostname to the inventory_hostname
+      hostname:
+        name: "{{ inventory_hostname }}"
+
+    - name: Store new hostname in /etc/hosts
+      lineinfile:
+        state=present
+        dest=/etc/hosts
+        line="{{ ansible_default_ipv4.address }} {{ inventory_hostname }} {{ ansible_hostname }}"
+        regexp="^{{ ansible_default_ipv4.address }}"
+
+- name: Setup wireguard mesh
+  hosts: wg
+  remote_user: root
+  roles:
+    - maxisme.wireguard_private_networking
+  vars:
+    wireguard_network_name: "maxnet"
