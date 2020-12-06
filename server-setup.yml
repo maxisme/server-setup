@@ -28,6 +28,22 @@
     - name: Restart sshd
       service: name=sshd state=restarted
 
+- name: Setup hostname
+  hosts: hostname
+  remote_user: root
+  become: yes
+  tasks:
+    - name: Change hostname to the inventory_hostname
+      hostname:
+        name: "{{ inventory_hostname }}"
+
+    - name: Store new hostname in /etc/hosts
+      lineinfile:
+        state=present
+        dest=/etc/hosts
+        line="{{ ansible_default_ipv4.address }} {{ inventory_hostname }} {{ ansible_hostname }}"
+        regexp="^{{ ansible_default_ipv4.address }}"
+
 - name: Setup docker
   hosts: all
   roles:
@@ -79,22 +95,6 @@
       - name: net_response
   vars_files:
     - vars/main.yml
-
-- name: Setup hostname
-  hosts: hostname
-  remote_user: root
-  become: yes
-  tasks:
-    - name: Change hostname to the inventory_hostname
-      hostname:
-        name: "{{ inventory_hostname }}"
-
-    - name: Store new hostname in /etc/hosts
-      lineinfile:
-        state=present
-        dest=/etc/hosts
-        line="{{ ansible_default_ipv4.address }} {{ inventory_hostname }} {{ ansible_hostname }}"
-        regexp="^{{ ansible_default_ipv4.address }}"
 
 - name: Setup wireguard mesh
   hosts: wg
