@@ -19,14 +19,15 @@ node1
 # raspbian wg
 ```
 curl -fsSL https://get.docker.com | sh
-
+apt install raspberrypi-kernel-headers
 echo "deb http://deb.debian.org/debian/ unstable main" | sudo tee --append /etc/apt/sources.list
 apt-key adv --keyserver   keyserver.ubuntu.com --recv-keys 04EE7237B7D453EC
 apt-key adv --keyserver   keyserver.ubuntu.com --recv-keys 648ACFD622F3D138
 sh -c 'printf "Package: *\nPin: release a=unstable\nPin-Priority: 90\n" > /etc/apt/preferences.d/limit-unstable'
-apt-get update
-apt install wireguard
-apt install raspberrypi-kernel-headers
+
+apt install --reinstall wireguard
+apt install --reinstall wireguard-dkms
+reboot
 ```
 # telegraf
 add your variables to the `vars/main.yml` :

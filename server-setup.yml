@@ -97,7 +97,7 @@
     - vars/main.yml
 
 - name: Setup wireguard mesh
-  hosts: wg
+  hosts: all
   remote_user: root
   roles:
     - maxisme.wireguard_private_networking
