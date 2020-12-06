@@ -2,7 +2,7 @@
 ```shell script
 $ cd ansible
 $ ansible-galaxy collection install community.crypto
-$ ansible-galaxy install maxisme.wireguard_private_networking rossmcdonald.telegraf --force
+$ ansible-galaxy install maxisme.wireguard_private_networking rossmcdonald.telegraf geerlingguy.docker --force
 $ ansible-playbook -i hosts server-setup.yml
 ```
 add hosts to `/etc/ansible/hosts` - e.g:

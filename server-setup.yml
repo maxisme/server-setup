@@ -44,6 +44,11 @@
         line="{{ ansible_default_ipv4.address }} {{ inventory_hostname }} {{ ansible_hostname }}"
         regexp="^{{ ansible_default_ipv4.address }}"
 
+- name: Setup docker
+  hosts: docker
+  roles:
+    - geerlingguy.docker
+
 - name: Setup wireguard mesh
   hosts: wg
   remote_user: root
