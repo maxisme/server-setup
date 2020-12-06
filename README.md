@@ -16,8 +16,10 @@ node1
 ```
 `ansible all -m ping`
 
-# raspbian wireguard install
+# raspbian wg
 ```
+curl -fsSL https://get.docker.com | sh
+
 echo "deb http://deb.debian.org/debian/ unstable main" | sudo tee --append /etc/apt/sources.list
 apt-key adv --keyserver   keyserver.ubuntu.com --recv-keys 04EE7237B7D453EC
 apt-key adv --keyserver   keyserver.ubuntu.com --recv-keys 648ACFD622F3D138
