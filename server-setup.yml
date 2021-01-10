@@ -102,7 +102,9 @@
   roles:
     - maxisme.wireguard_private_networking
   vars:
-    wireguard_network_name: "maxnet"
+    wireguard_port: "5887"
+    wireguard_base_host: 10.1.0.
+    wireguard_network_name: "wg1"
     wireguard_additional_peers:
       - wg_ip: 10.1.0.100
         key: rs1jce+J5rtFimJ/ELoxaFMX5tPWGRG22EoG7FbWXWg=
